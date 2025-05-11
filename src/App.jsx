@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Toaster, toast } from "sonner";
 import CardPreview from "./assets/cards-preview.png";
 import Header from "./components/Header";
+import Squares from "./components/Squares";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -58,6 +59,13 @@ export default function App() {
 
   return (
     <div className="bg-base-300 h-dvh w-full plus-jakarta-sans ">
+      <Squares
+        speed={0.5}
+        squareSize={40}
+        direction="diagonal" // up, down, left, right, diagonal
+        borderColor="#6e5d5d25"
+        hoverFillColor="#222"
+      />
       <Header />
       <Toaster
         theme="dark"
@@ -77,7 +85,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-y-4 text-center max-w-[450px] mx-auto">
+        <div className="flex flex-col gap-y-4 text-center max-w-[450px] mx-auto z-1000">
           <p className="text-3xl comfortaa font-bold leading-10">
             Supercharge your learning with AI ✦
           </p>
@@ -120,7 +128,7 @@ export default function App() {
               placeholder="Enter your email"
               className="input input-bordered w-full validator"
             />
-            <p class="validator-hint sm:absolute sm:top-10">
+            <p class="validator-hint sm:absolute sm:top-10 hidden">
               Enter a valid email address
             </p>
             {joined ? (
