@@ -1,17 +1,74 @@
-import Header from "./components/Header";
-import { Icon } from "@iconify/react";
-import CardPreview from "./assets/cards-preview.png";
-import { useEffect, useState } from "react";
+import { Icon, loadIcons } from "@iconify/react";
 import { createClient } from "@supabase/supabase-js";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
+import CardPreview from "./assets/cards-preview.png";
+import Header from "./components/Header";
+
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
+const joinWaitlist = async (email) => {
+  const { data, error } = await supabase
+    .from("waitlist")
+    .insert([{ email }])
+    .select();
+
+  if (error) {
+    console.error("Error joining waitlist:", error);
+  } else {
+    console.log("Successfully joined waitlist:", data);
+  }
+};
+
 export default function App() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [joined, setJoined] = useState(false);
+  loadIcons([
+    "eos-icons:three-dots-loading",
+    "si:mail-line",
+    "material-symbols:check-circle-rounded",
+  ]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+
+    if (joined) return;
+
+    if (!email) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+    setIsSubmitting(true);
+
+    try {
+      await joinWaitlist(email);
+      toast.success("Successfully joined the waitlist!");
+    } catch (error) {
+      toast.error("Failed to join waitlist. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+      setJoined(true);
+      e.target.reset();
+    }
+  };
+
   return (
     <div className="bg-base-300 h-dvh w-full">
       <Header />
+      <Toaster
+        theme="dark"
+        toastOptions={{
+          style: {
+            background: "oklch(26.74% 0.005 248)", // Your base-300 color
+            color: "oklch(84.955% 0 0)", // Your base-content color
+            border: "1px solid oklch(32.42% 0.006 258.35)", // Subtle border with base-200
+          },
+        }}
+      />
       <main className="flex items-start justify-between pt-[18vh] px-28 max-w-7xl gap-x-16 mx-auto">
         <div className="">
           <div className="w-[440px] h-[325px] relative">
@@ -39,16 +96,44 @@ export default function App() {
             <li className="leading-6">Early bird discounts on the app.</li>
           </ul>
 
-          <div className="flex mt-4">
+          <form onSubmit={handleSubmit} className="flex mt-4 gap-2 relative">
             <input
               type="email"
+              name="email"
+              disabled={isSubmitting}
+              required
+              autoComplete="email"
               placeholder="Enter your email"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full validator"
             />
-            <button className="btn btn-primary ml-2">
-              <Icon icon="si:mail-line" /> Join Waitlist
-            </button>
-          </div>
+            {joined ? (
+              <button className="btn !btn-success min-w-[130.9px]">
+                <Icon icon="material-symbols:check-circle-rounded" />
+                Joined!
+              </button>
+            ) : (
+              <button
+                disabled={isSubmitting}
+                className={`btn btn-primary min-w-[130.9px]`}
+              >
+                {isSubmitting ? (
+                  <span>
+                    <Icon
+                      icon="eos-icons:three-dots-loading"
+                      className="text-2xl"
+                    />
+                  </span>
+                ) : (
+                  <>
+                    <Icon icon="si:mail-line" /> Join Waitlist
+                  </>
+                )}
+              </button>
+            )}
+            <p class="validator-hint absolute top-10">
+              Enter a valid email address
+            </p>
+          </form>
         </div>
       </main>
     </div>
