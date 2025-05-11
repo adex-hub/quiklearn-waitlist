@@ -57,46 +57,60 @@ export default function App() {
   };
 
   return (
-    <div className="bg-base-300 h-dvh w-full">
+    <div className="bg-base-300 h-dvh w-full plus-jakarta-sans ">
       <Header />
       <Toaster
         theme="dark"
         toastOptions={{
           style: {
-            background: "oklch(26.74% 0.005 248)", // Your base-300 color
-            color: "oklch(84.955% 0 0)", // Your base-content color
-            border: "1px solid oklch(32.42% 0.006 258.35)", // Subtle border with base-200
+            background: "oklch(26.74% 0.005 248)",
+            color: "oklch(84.955% 0 0)",
+            border: "1px solid oklch(32.42% 0.006 258.35)",
           },
         }}
       />
-      <main className="flex items-start justify-between pt-[18vh] px-28 max-w-7xl gap-x-16 mx-auto">
-        <div className="">
+      <main className="flex items-start justify-between pt-[12vh] sm:pt-[18vh] px-6 max-w-7xl gap-x-16 mx-auto">
+        {/* temporarily hiding it to work on some other stuff. */}
+        <div className="hidden">
           <div className="w-[440px] h-[325px] relative">
             <img src={CardPreview} alt="flashcards" className="w-full h-full" />
           </div>
         </div>
-        <div className="flex flex-col gap-y-4">
-          <p className="text-sm">Supercharge your learning with AI ✦</p>
-          <h1 className="text-3xl font-bold text-primary">
-            Join the waitlist to get started
-          </h1>
-          <p className="text-base">What you get:</p>
-          <ul className="list-disc text-base translate-x-6 space-y-2">
-            <li className="leading-6">
-              Generate custom flashcards on any topic, and from course PDFs too
-            </li>
-            <li className="leading-6">
-              Benefit from our spaced-repetition algorithm that ensures what you
-              learn sticks.
-            </li>
-            <li className="leading-6">
-              Test yourself with interactive quizzes based on what you&apos;ve
-              studied.
-            </li>
-            <li className="leading-6">Early bird discounts on the app.</li>
-          </ul>
 
-          <form onSubmit={handleSubmit} className="flex mt-4 gap-2 relative">
+        <div className="flex flex-col gap-y-4 text-center max-w-[450px] mx-auto">
+          <p className="text-3xl comfortaa font-bold leading-10">
+            Supercharge your learning with AI ✦
+          </p>
+          <h1 className="text-sm leading-7">
+            Through instant interactive flashcards and quizzes, we are about to
+            optimize your learning for the best! Join our waitlist to be the
+            first to know when we launch!
+          </h1>
+
+          {/* Hiding this to focus on more important elements */}
+          <div className="text-left order-3 sm:order-2 hidden">
+            <p className="text-base">What you get:</p>
+            <ul className="list-disc text-base translate-x-6 space-y-2">
+              <li className="leading-6">
+                Generate custom flashcards on any topic, and from course PDFs
+                too
+              </li>
+              <li className="leading-6">
+                Benefit from our spaced-repetition algorithm that ensures what
+                you learn sticks.
+              </li>
+              <li className="leading-6">
+                Test yourself with interactive quizzes based on what you&apos;ve
+                studied.
+              </li>
+              <li className="leading-6">Early bird discounts on the app.</li>
+            </ul>
+          </div>
+
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col sm:flex-row mt-4 gap-2 relative order-2 sm:order-3"
+          >
             <input
               type="email"
               name="email"
@@ -106,6 +120,9 @@ export default function App() {
               placeholder="Enter your email"
               className="input input-bordered w-full validator"
             />
+            <p class="validator-hint sm:absolute sm:top-10">
+              Enter a valid email address
+            </p>
             {joined ? (
               <button className="btn !btn-success min-w-[130.9px]">
                 <Icon icon="material-symbols:check-circle-rounded" />
@@ -130,9 +147,6 @@ export default function App() {
                 )}
               </button>
             )}
-            <p class="validator-hint absolute top-10">
-              Enter a valid email address
-            </p>
           </form>
         </div>
       </main>
