@@ -59,13 +59,13 @@ export default function App() {
 
   return (
     <div className="bg-base-300 h-dvh w-full plus-jakarta-sans ">
-      {/* <Squares
+      <Squares
         speed={0.5}
         squareSize={40}
         direction="diagonal" // up, down, left, right, diagonal
         borderColor="#6e5d5d25"
         hoverFillColor="#222"
-      /> */}
+      />
       <Header />
       <Toaster
         theme="dark"
