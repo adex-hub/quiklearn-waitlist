@@ -1,6 +1,12 @@
 import Header from "./components/Header";
 import { Icon } from "@iconify/react";
 import CardPreview from "./assets/cards-preview.png";
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 export default function App() {
   return (
