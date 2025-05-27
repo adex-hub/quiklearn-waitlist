@@ -11,6 +11,21 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
+const checkWaitlist = async (email) => {
+  const { data, error } = await supabase
+    .from("waitlist")
+    .select("*")
+    .eq("email", email)
+    .single();
+
+  if (error) {
+    console.error("Error checking waitlist:", error);
+    return false;
+  }
+
+  return data ? true : false;
+};
+
 const joinWaitlist = async (email) => {
   const { data, error } = await supabase
     .from("waitlist")
@@ -46,8 +61,17 @@ export default function App() {
     setIsSubmitting(true);
 
     try {
-      await joinWaitlist(email);
-      toast.success("Successfully joined the waitlist!");
+      // Check if email already exists
+      const alreadyExists = await checkWaitlist(email);
+
+      if (alreadyExists) {
+        toast.info(
+          "We're happy you're exited about Quiklearn and its coming to you soon"
+        );
+      } else {
+        await joinWaitlist(email);
+        toast.success("Successfully joined the waitlist!");
+      }
     } catch (error) {
       toast.error("Failed to join waitlist. Please try again.");
     } finally {
