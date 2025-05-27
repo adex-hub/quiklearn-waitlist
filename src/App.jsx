@@ -150,6 +150,7 @@ export default function App() {
               required
               autoComplete="email"
               placeholder="Enter your email"
+              pattern="^\S+@\S+\.\S+$"
               className="input input-bordered w-full validator"
             />
             <p class="validator-hint sm:absolute sm:top-10 hidden">
